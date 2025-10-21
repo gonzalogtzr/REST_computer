@@ -17,7 +17,7 @@ def home():
 @app.route('/api/dia', methods=['GET'])
 def get_dia():
     ahora = datetime.now()
-    dia_texto = ahora.strftime("%A %d de %B de %Y")  # Ejemplo: lunes 20 de octubre de 2025
+    dia_texto = ahora.strftime("%A %d de %B de %Y")  
     return jsonify({
         "fecha": ahora.strftime("%Y-%m-%d"),
         "dia": dia_texto.capitalize()
