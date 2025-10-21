@@ -18,7 +18,7 @@ def index():
     <html lang="es">
     <head>
         <meta charset="UTF-8">
-        <title>Mostrar Día Actual</title>
+        <title>Aplicacion de ¨Prueba, para IoT</title>
         <style>
             body { font-family: Arial; text-align: center; margin-top: 50px; }
             button {
