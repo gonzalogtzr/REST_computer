@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Control de Nivel de Líquido</title>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 40px;
+      background: #f4f6f8;
+    }
+    h1 {
+      color: #333;
+    }
+    #gauge {
+      width: 400px;
+      margin: auto;
+    }
+    #slider-container {
+      margin-top: 30px;
+    }
+    input[type="range"] {
+      width: 80%;
+    }
+  </style>
+</head>
+<body>
+  <h1>🧪 Nivel de Líquido</h1>
+
+  <div id="gauge"></div>
+
+  <div id="slider-container">
+    <label for="levelRange">Nivel: <span id="levelValue">{{ level }}</span>%</label><br>
+    <input type="range" id="levelRange" min="0" max="100" step="1" value="{{ level }}">
+  </div>
+
+  <script>
+    let currentLevel = {{ level }};
+
+    // Función para dibujar el gauge
+    function drawGauge(value) {
+      const data = [
+        {
+          type: "indicator",
+          mode: "gauge+number",
+          value: value,
+          title: { text: "Nivel (%)", font: { size: 24 } },
+          gauge: {
+            axis: { range: [0, 100], tickwidth: 1, tickcolor: "#333" },
+            bar: { color: "#3e9fff" },
+            bgcolor: "white",
+            borderwidth: 2,
+            bordercolor: "#ccc",
+            steps: [
+              { range: [0, 30], color: "#ffb3b3" },
+              { range: [30, 70], color: "#fff0b3" },
+              { range: [70, 100], color: "#b3ffb3" }
+            ],
+          }
+        }
+      ];
+
+      const layout = {
+        width: 400,
+        height: 300,
+        margin: { t: 0, b: 0 },
+        paper_bgcolor: "rgba(0,0,0,0)",
+      };
+
+      Plotly.newPlot("gauge", data, layout, { displayModeBar: false });
+    }
+
+    // Inicializar gauge
+    drawGauge(currentLevel);
+
+    // Actualizar cuando se mueve el slider
+    const slider = document.getElementById("levelRange");
+    const label = document.getElementById("levelValue");
+
+    slider.addEventListener("input", function() {
+      const newValue = this.value;
+      label.textContent = newValue;
+      drawGauge(newValue);
+    });
+
+    // Enviar el valor al servidor cuando se suelta el slider
+    slider.addEventListener("change", function() {
+      fetch("/set_level", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ level: this.value })
+      });
+    });
+  </script>
+</body>
+</html>
