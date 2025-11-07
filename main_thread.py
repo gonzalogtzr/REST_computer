@@ -9,7 +9,7 @@ def blink_led():
 def control_servo():
     while True:
         print("Hilo 2..")
-        time.sleep(2)
+        time.sleep(3)
 
 # Create thread for LED
 led_thread = threading.Thread(target=blink_led)
@@ -26,4 +26,4 @@ servo_thread.start()
 # Main program continues its own tasks
 while True:
     print("Main program running...")
-    time.sleep(3)
+    time.sleep(5)
